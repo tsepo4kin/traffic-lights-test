@@ -19,9 +19,6 @@ export default {
       require: true,
     },
   },
-  data() {
-    return {};
-  },
 };
 </script>
 

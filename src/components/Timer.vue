@@ -13,10 +13,14 @@ export default {
     },
   },
   data: () => ({
-    seconds: null,
+    seconds: 0,
   }),
-  created() {
-    this.seconds = this.time;
+  watch: {
+    time: function (newVal) {
+      this.seconds = newVal;
+    },
+  },
+  mounted() {
     setInterval(() => {
       this.seconds = this.seconds - 1;
     }, 1000);
