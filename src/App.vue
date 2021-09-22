@@ -1,16 +1,54 @@
 <template>
   <div id="app">
-    <timer :time="10"></timer>
-    <router-view />
+    <trafficLights :colors="colors"></trafficLights>
+    <timer :time="time"></timer>
   </div>
 </template>
 
 <script>
+import TrafficLights from "./views/TrafficLights.vue";
 import Timer from "./components/Timer.vue";
 
 export default {
   components: {
     Timer,
+    TrafficLights,
+  },
+  data() {
+    return {
+      colors: null,
+      time: null,
+    };
+  },
+  methods: {
+    changeColors(pattern, cb) {
+      cb(pattern);
+      setTimeout(() => {
+        this.changeColors(pattern.next, cb);
+      }, pattern.time * 1000);
+    },
+  },
+  mounted() {
+    class Pattern {
+      constructor(colors, time, next) {
+        (this.colors = colors), (this.time = time), (this.next = next);
+      }
+    }
+    let red = new Pattern(["red", "gray", "gray"], 10);
+    let yellowG = new Pattern(["gray", "yellow", "gray"], 3);
+    let green = new Pattern(["gray", "gray", "green"], 15);
+    let yellowR = new Pattern(["gray", "yellow", "gray"], 3);
+
+    red.next = yellowG;
+    yellowG.next = green;
+    green.next = yellowR;
+    yellowR.next = red;
+
+    this.changeColors(red, (pattern) => {
+      console.log(this.colors);
+      this.colors = pattern.colors;
+      this.time = pattern.time;
+    });
   },
 };
 </script>

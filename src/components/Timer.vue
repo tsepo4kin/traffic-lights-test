@@ -1,6 +1,6 @@
 <template>
   <div class="timer">
-    {{ time }}
+    {{ seconds }}
   </div>
 </template>
 
@@ -12,8 +12,26 @@ export default {
       require: true,
     },
   },
+  data: () => ({
+    seconds: null,
+  }),
+  created() {
+    this.seconds = this.time;
+    setInterval(() => {
+      this.seconds = this.seconds - 1;
+    }, 1000);
+  },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+.timer {
+  margin: 0 auto;
+  font-size: 45px;
+  width: 50px;
+  height: 50px;
+  border: 1px solid black;
+  border-radius: 2px;
+}
+</style>
