@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import TrafficLights from "../views/TrafficLights.vue";
 
 Vue.use(VueRouter);
 
@@ -7,22 +8,22 @@ const routes = [
   {
     path: "/",
     name: "TrafficLights",
-    component: () => import("../views/TrafficLights.vue"),
+    component: TrafficLights,
   },
   {
     path: "/red",
     name: "red",
-    component: () => import("../views/TrafficLights.vue"),
+    component: TrafficLights,
   },
   {
     path: "/yellow",
     name: "yellow",
-    component: () => import("../views/TrafficLights.vue"),
+    component: TrafficLights,
   },
   {
     path: "/green",
     name: "green",
-    component: () => import("../views/TrafficLights.vue"),
+    component: TrafficLights,
   },
 ];
 
