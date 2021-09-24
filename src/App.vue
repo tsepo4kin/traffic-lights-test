@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <trafficLights :colors="colors"></trafficLights>
-    <timer :time="time"></timer>
+    <trafficLights :color="color" :time="isBlinking"></trafficLights>
+    <timer @blinking="blinkingHandler" :time="time"></timer>
   </div>
 </template>
 
@@ -16,8 +16,9 @@ export default {
   },
   data() {
     return {
-      colors: null,
+      color: null,
       time: null,
+      isBlinking: null,
     };
   },
   methods: {
@@ -30,20 +31,23 @@ export default {
         this.changeColors(pattern.next, cb);
       }, pattern.time * 1000);
     },
+    blinkingHandler(val) {
+      this.isBlinking = val;
+    },
   },
   mounted() {
     class Pattern {
-      constructor(colors, time, path, next) {
-        (this.colors = colors),
+      constructor(color, time, path, next) {
+        (this.color = color),
           (this.time = time),
           (this.next = next),
           (this.path = path);
       }
     }
-    let red = new Pattern(["red", "gray", "gray"], 10, "/red");
-    let yellowG = new Pattern(["gray", "yellow", "gray"], 3, "/yellow");
-    let green = new Pattern(["gray", "gray", "green"], 15, "/green");
-    let yellowR = new Pattern(["gray", "yellow", "gray"], 3, "/yellow");
+    let red = new Pattern("red", 10, "/red");
+    let yellowG = new Pattern("yellow", 3, "/yellow");
+    let green = new Pattern("green", 15, "/green");
+    let yellowR = new Pattern("yellow", 3, "/yellow");
 
     red.next = yellowG;
     yellowG.next = green;
@@ -51,7 +55,7 @@ export default {
     yellowR.next = red;
 
     let cb = (pattern) => {
-      this.colors = pattern.colors;
+      this.color = pattern.color;
       this.time = pattern.time;
       if (this.$route.path != pattern.path) {
         this.$router.push(pattern.path);

@@ -8,7 +8,11 @@ export default {
     color: {
       type: String,
     },
+    blinking: {
+      type: Boolean,
+    },
   },
+  data: () => ({}),
 };
 </script>
 

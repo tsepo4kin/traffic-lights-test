@@ -19,6 +19,22 @@ export default {
     time: function (newVal) {
       this.seconds = newVal;
     },
+    seconds: function (newVal) {
+      if (newVal <= 3 && newVal > 0 && this.time > 3) {
+        this.$emit("blinking", true);
+      } else {
+        this.$emit("blinking", false);
+      }
+    },
+  },
+  computed: {
+    calcBlinking() {
+      if (this.seconds <= 3 && this.time > 3) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   mounted() {
     setInterval(() => {

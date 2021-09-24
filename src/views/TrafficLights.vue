@@ -1,6 +1,11 @@
 <template>
   <div class="TrafficLights">
-    <light v-for="(color, i) in colors" :key="i" :color="color"></light>
+    <light
+      v-for="(item, i) in data"
+      :key="i"
+      :color="item.color"
+      :blinking="item.blinking"
+    ></light>
   </div>
 </template>
 
@@ -14,9 +19,54 @@ export default {
     Light,
   },
   props: {
-    colors: {
-      type: Array,
-      require: true,
+    color: {
+      type: String,
+    },
+    blinking: {
+      type: Boolean,
+    },
+  },
+  data: () => ({
+    data: [
+      {
+        color: null,
+        blinking: false,
+      },
+      {
+        color: null,
+        blinking: false,
+      },
+      {
+        color: null,
+        blinking: false,
+      },
+    ],
+  }),
+  watch: {
+    color: function (newVal) {
+      if (newVal == "red") {
+        this.data[0].color = "red";
+        this.data[1].color = "gray";
+        this.data[2].color = "gray";
+      } else if (newVal == "yellow") {
+        this.data[0].color = "gray";
+        this.data[1].color = "yellow";
+        this.data[2].color = "gray";
+      } else {
+        this.data[0].color = "gray";
+        this.data[1].color = "gray";
+        this.data[2].color = "green";
+      }
+    },
+    blinking: function (newVal) {
+      this.data = this.data.map((el) => {
+        if (el.color == this.color) {
+          el.blinking = newVal;
+        } else {
+          el.blinking = false;
+        }
+        return el;
+      });
     },
   },
 };
