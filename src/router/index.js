@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: ":LightColor",
+    path: "/:LightColor",
     name: "TrafficLights",
     component: TrafficLights,
   },
