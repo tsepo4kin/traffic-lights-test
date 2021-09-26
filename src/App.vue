@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <trafficLights :color="color" :time="isBlinking"></trafficLights>
+    <trafficLights :color="color" :blinking="isBlinking"></trafficLights>
     <timer @blinking="blinkingHandler" :time="time"></timer>
   </div>
 </template>
