@@ -20,6 +20,7 @@ export default {
       this.seconds = newVal;
     },
     seconds: function (newVal) {
+      this.$emit("leftTime", newVal);
       if (newVal <= 3 && newVal > 0 && this.time > 3) {
         this.$emit("blinking", true);
       } else {

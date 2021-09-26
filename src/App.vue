@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <trafficLights :color="color" :blinking="isBlinking"></trafficLights>
-    <timer @blinking="blinkingHandler" :time="time"></timer>
+    <timer
+      @blinking="blinkingHandler"
+      @leftTime="timeHandler"
+      :time="time"
+    ></timer>
   </div>
 </template>
 
@@ -19,6 +23,8 @@ export default {
       color: null,
       time: null,
       isBlinking: null,
+      pattern: null,
+      leftTime: null,
     };
   },
   methods: {
@@ -33,6 +39,31 @@ export default {
     },
     blinkingHandler(val) {
       this.isBlinking = val;
+    },
+    timeHandler(val) {
+      this.leftTime = val;
+    },
+    setLocalstorage() {
+      class Pattern {
+        constructor(color, time, path, next) {
+          (this.color = color),
+            (this.time = time),
+            (this.next = next),
+            (this.path = path);
+        }
+      }
+
+      localStorage.setItem(
+        "trafficLight",
+        JSON.stringify(
+          new Pattern(
+            this.pattern.color,
+            this.leftTime,
+            this.pattern.path,
+            this.pattern.next
+          )
+        )
+      );
     },
   },
   mounted() {
@@ -57,12 +88,21 @@ export default {
     let cb = (pattern) => {
       this.color = pattern.color;
       this.time = pattern.time;
+      this.pattern = pattern;
       if (this.$route.path != pattern.path) {
         this.$router.push(pattern.path);
       }
     };
 
-    if (this.$route.path == "/yellow") {
+    window.addEventListener("beforeunload", this.setLocalstorage);
+
+    if (this.$route.path == "/") {
+      console.log(1, storagePattern);
+      let storagePattern = localStorage.getItem("trafficLight")
+        ? JSON.parse(localStorage.getItem("trafficLight"))
+        : red;
+      this.changeColors(storagePattern, cb);
+    } else if (this.$route.path == "/yellow") {
       this.changeColors(yellowG, cb);
     } else if (this.$route.path == "/green") {
       this.changeColors(green, cb);
