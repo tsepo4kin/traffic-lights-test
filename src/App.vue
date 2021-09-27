@@ -44,25 +44,9 @@ export default {
       this.leftTime = val;
     },
     setLocalstorage() {
-      class Pattern {
-        constructor(color, time, path, next) {
-          (this.color = color),
-            (this.time = time),
-            (this.next = next),
-            (this.path = path);
-        }
-      }
-
       localStorage.setItem(
         "trafficLight",
-        JSON.stringify(
-          new Pattern(
-            this.pattern.color,
-            this.leftTime,
-            this.pattern.path,
-            this.pattern.next
-          )
-        )
+        JSON.stringify({ pattern: this.pattern, time: this.leftTime })
       );
     },
   },
@@ -88,25 +72,53 @@ export default {
     let cb = (pattern) => {
       this.color = pattern.color;
       this.time = pattern.time;
-      this.pattern = pattern;
+      this.pattern = { color: pattern.color, nextColor: pattern.next.color };
       if (this.$route.path != pattern.path) {
         this.$router.push(pattern.path);
       }
     };
 
     window.addEventListener("beforeunload", this.setLocalstorage);
-
-    if (this.$route.path == "/") {
-      console.log(1, storagePattern);
-      let storagePattern = localStorage.getItem("trafficLight")
-        ? JSON.parse(localStorage.getItem("trafficLight"))
-        : red;
-      this.changeColors(storagePattern, cb);
+    let storageData = JSON.parse(localStorage.getItem("trafficLight"));
+    let storagePattern;
+    if (storageData.pattern != null && storageData.time != null) {
+      let patterns = [red, yellowG, green, yellowR];
+      for (let i of patterns) {
+        if (
+          i.color == storageData.pattern.color &&
+          i.next.color == storageData.pattern.nextColor
+        ) {
+          storagePattern = new Pattern(
+            i.color,
+            storageData.time,
+            i.path,
+            i.next
+          );
+        }
+      }
+      if (
+        this.$route.path == "/yellow" &&
+        storageData.pattern.color != "yellow"
+      ) {
+        this.changeColors(yellowG, cb);
+      } else if (
+        this.$route.path == "/green" &&
+        storageData.pattern.color != "green"
+      ) {
+        this.changeColors(green, cb);
+      } else if (
+        this.$route.path == "/red" &&
+        storageData.pattern.color != "red"
+      ) {
+        this.changeColors(red, cb);
+      } else {
+        this.changeColors(storagePattern, cb);
+      }
     } else if (this.$route.path == "/yellow") {
       this.changeColors(yellowG, cb);
     } else if (this.$route.path == "/green") {
       this.changeColors(green, cb);
-    } else {
+    } else if (this.$route.path == "/red") {
       this.changeColors(red, cb);
     }
   },
