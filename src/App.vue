@@ -31,10 +31,13 @@ export default {
     },
   },
   mounted() {
-    let storageData = JSON.parse(localStorage.getItem("trafficLight"));
+    let storageData = localStorage.getItem("trafficLight")
+      ? JSON.parse(localStorage.getItem("trafficLight"))
+      : null;
     if (
-      "/" + storageData.pattern?.color == this.$route.path ||
-      (this.$route.path == "/" && storageData.pattern != null)
+      (storageData?.pattern != null &&
+        "/" + storageData.pattern?.color == this.$route.path) ||
+      (this.$route.path == "/" && storageData?.pattern != null)
     ) {
       this.startColor = storageData.pattern;
       this.startTime = storageData.time;
