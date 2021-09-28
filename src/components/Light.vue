@@ -24,6 +24,7 @@ export default {
   }),
   watch: {
     blinking: function (newVal) {
+      const INTERVAL_TIME = 450;
       if (newVal && this.color != this.defaultColor) {
         this.interval = setInterval(() => {
           if (this.blinkingColor == this.color) {
@@ -31,7 +32,7 @@ export default {
           } else {
             this.blinkingColor = this.color;
           }
-        }, 450);
+        }, INTERVAL_TIME);
       } else {
         this.blinkingColor = null;
         clearInterval(this.interval);

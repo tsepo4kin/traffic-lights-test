@@ -59,15 +59,20 @@ export default {
   },
   methods: {
     changeColors(pattern, cb) {
+      const TIMEOUT_TIME = 1000;
+
       clearInterval(this.interval);
       this.time = 0;
+
       cb(pattern);
+
       if (this.$route.path !== pattern.path) {
         this.$router.push(pattern.path);
       }
+
       setTimeout(() => {
         this.changeColors(pattern.next, cb);
-      }, pattern.time * 1000);
+      }, pattern.time * TIMEOUT_TIME);
 
       this.time--;
       this.$emit("timer", this.time);
@@ -76,7 +81,7 @@ export default {
         this.time--;
         this.checkBlinking();
         this.$emit("timer", this.time);
-      }, 1000);
+      }, TIMEOUT_TIME);
     },
 
     setLocalstorage() {
@@ -124,6 +129,7 @@ export default {
       this.time = pattern.time + 1;
       this.color = pattern.color;
       this.pattern = { color: pattern.color, nextColor: pattern.next.color };
+
       if (this.$route.path != pattern.path) {
         this.$router.push(pattern.path);
       }
@@ -135,6 +141,7 @@ export default {
 
     if (this.startTime) {
       let storagePattern;
+
       for (let item of patternsArr) {
         if (
           item.color == this.colorStart.color &&
@@ -148,6 +155,7 @@ export default {
           );
         }
       }
+
       this.changeColors(storagePattern, cb);
     } else {
       for (let item of patternsArr) {
