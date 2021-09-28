@@ -157,6 +157,10 @@ export default {
       }
     }
   },
+  beforeDestroy() {
+    clearInterval(this.interval);
+    window.removeEventListener("beforeunload", this.setLocalstorage);
+  },
 };
 </script>
 

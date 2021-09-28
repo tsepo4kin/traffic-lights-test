@@ -38,6 +38,9 @@ export default {
       }
     },
   },
+  beforeDestroy() {
+    clearInterval(this.interval);
+  },
 };
 </script>
 
