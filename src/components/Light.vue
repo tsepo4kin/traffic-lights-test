@@ -1,7 +1,8 @@
 <template>
-  <div class="color" :style="{ 'background-color': blinkingColor }">
-    {{ blinking }}
-  </div>
+  <div
+    class="color"
+    :style="{ 'background-color': blinkingColor || color }"
+  ></div>
 </template>
 
 <script>
@@ -13,25 +14,26 @@ export default {
     blinking: {
       type: Boolean,
     },
+    defaultColor: {
+      type: String,
+    },
   },
   data: () => ({
     blinkingColor: null,
     interval: null,
   }),
   watch: {
-    color: function (newVal) {
-      this.blinkingColor = newVal;
-    },
     blinking: function (newVal) {
-      if (newVal) {
+      if (newVal && this.color != this.defaultColor) {
         this.interval = setInterval(() => {
           if (this.blinkingColor == this.color) {
-            this.blinkingColor = "gray";
+            this.blinkingColor = this.defaultColor;
           } else {
             this.blinkingColor = this.color;
           }
         }, 450);
       } else {
+        this.blinkingColor = null;
         clearInterval(this.interval);
       }
     },
@@ -44,7 +46,6 @@ export default {
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background-color: grey;
   margin: 15px auto;
 }
 </style>

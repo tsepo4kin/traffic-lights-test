@@ -1,6 +1,6 @@
 <template>
   <div class="timer">
-    {{ seconds }}
+    {{ time }}
   </div>
 </template>
 
@@ -11,36 +11,6 @@ export default {
     time: {
       require: true,
     },
-  },
-  data: () => ({
-    seconds: 0,
-  }),
-  watch: {
-    time: function (newVal) {
-      this.seconds = newVal;
-    },
-    seconds: function (newVal) {
-      this.$emit("leftTime", newVal);
-      if (newVal <= 3 && newVal > 0 && this.time > 3) {
-        this.$emit("blinking", true);
-      } else {
-        this.$emit("blinking", false);
-      }
-    },
-  },
-  computed: {
-    calcBlinking() {
-      if (this.seconds <= 3 && this.time > 3) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-  },
-  mounted() {
-    setInterval(() => {
-      this.seconds = this.seconds - 1;
-    }, 1000);
   },
 };
 </script>
