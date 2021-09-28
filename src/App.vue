@@ -31,9 +31,12 @@ export default {
     },
   },
   mounted() {
+    let PATH_ARRAY = ["/yellow", "/green", "/red", "/"];
+
     let storageData = localStorage.getItem("trafficLight")
       ? JSON.parse(localStorage.getItem("trafficLight"))
       : null;
+
     if (
       (storageData?.pattern != null &&
         "/" + storageData.pattern?.color == this.$route.path) ||
@@ -41,12 +44,17 @@ export default {
     ) {
       this.startColor = storageData.pattern;
       this.startTime = storageData.time;
-    } else if (this.$route.path == "/yellow") {
-      this.startColor = "yellow";
-    } else if (this.$route.path == "/green") {
-      this.startColor = "green";
-    } else if (this.$route.path == "/red" || this.$route.path == "/") {
-      this.startColor = "red";
+    } else {
+      for (let path of PATH_ARRAY) {
+        if (this.$route.path === path) {
+          if (path == "/") {
+            this.startColor = "red";
+          } else {
+            this.startColor = path.substring(1);
+            break;
+          }
+        }
+      }
     }
   },
 };
